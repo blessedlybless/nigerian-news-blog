@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🇳🇬 Nigerian News Hub - Latest Updates with Images</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6; color: #333; background: #f4f4f4;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .header {
+            background: linear-gradient(135deg, #009639 0%, #ffffff 50%, #009639 100%);
+            color: white; padding: 2rem 0; margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .header h1 {
+            text-align: center; font-size: 2.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            color: #009639;
+        }
+        .header p {
+            text-align: center; margin-top: 0.5rem;
+            color: #009639; font-size: 1.1rem; font-weight: 500;
+        }
+        .stats-bar {
+            background: white; padding: 1.5rem; margin-bottom: 2rem;
+            border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem; text-align: center;
+        }
+        .stat-item h3 {
+            color: #009639; margin-bottom: 0.5rem; font-size: 2rem;
+        }
+        .stat-item p { color: #666; font-weight: 500; }
+
+        .action-bar {
+            background: white; padding: 1rem; margin-bottom: 2rem;
+            border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center; display: flex; gap: 1rem; justify-content: center;
+            flex-wrap: wrap;
+        }
+        .action-btn {
+            display: inline-block; padding: 0.7rem 1.5rem;
+            background: #009639; color: white; text-decoration: none;
+            border: none; border-radius: 25px; cursor: pointer;
+            font-weight: 500; transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 150, 57, 0.3);
+        }
+        .action-btn:hover {
+            background: #007a2e; transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 150, 57, 0.4);
+        }
+        .action-btn.secondary {
+            background: #6c757d; box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+        }
+        .action-btn.secondary:hover { background: #545b62; }
+
+        .categories-nav {
+            background: white; padding: 1rem; margin-bottom: 2rem;
+            border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .category-filter {
+            display: inline-block; margin: 0 0.5rem; padding: 0.5rem 1rem;
+            background: #f8f9fa; border: 2px solid #009639; border-radius: 25px;
+            color: #009639; font-weight: 500;
+            transition: all 0.3s ease; cursor: pointer;
+        }
+        .category-filter:hover, .category-filter.active {
+            background: #009639; color: white;
+        }
+
+        .article-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        .article-card {
+            border: 1px solid #ddd; border-radius: 15px;
+            background: white; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease; overflow: hidden;
+        }
+        .article-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        }
+
+        .article-image {
+            width: 100%; height: 200px; object-fit: cover;
+            border-bottom: 1px solid #eee;
+        }
+        .article-image-placeholder {
+            width: 100%; height: 200px; background: linear-gradient(135deg, #009639, #00b545);
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 3rem; border-bottom: 1px solid #eee;
+        }
+
+        .article-content {
+            padding: 1.5rem;
+        }
+        .article-title {
+            color: #2c3e50; margin-bottom: 1rem; font-size: 1.2rem;
+            font-weight: 600; line-height: 1.4;
+        }
+        .article-meta {
+            color: #666; font-size: 0.9rem; margin-bottom: 1rem;
+            display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;
+        }
+        .meta-badge {
+            background: #e9ecef; padding: 0.3rem 0.7rem;
+            border-radius: 15px; font-size: 0.8rem;
+        }
+        .nigeria-badge { background: #009639; color: white; }
+        .sports-badge { background: #ff6b35; color: white; }
+        .entertainment-badge { background: #8e44ad; color: white; }
+        .article-desc {
+            margin-bottom: 1.5rem; color: #555; line-height: 1.6;
+        }
+        .read-more {
+            background: linear-gradient(45deg, #009639, #00b545);
+            color: white; padding: 0.8rem 1.5rem; text-decoration: none;
+            border-radius: 25px; display: inline-block;
+            transition: all 0.3s ease; font-weight: 500;
+            box-shadow: 0 4px 15px rgba(0, 150, 57, 0.3);
+        }
+        .read-more:hover {
+            background: linear-gradient(45deg, #007a2e, #009639);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 150, 57, 0.4);
+        }
+
+        .refresh-btn {
+            position: fixed; bottom: 20px; right: 20px;
+            background: #009639; color: white; border: none;
+            padding: 1rem; border-radius: 50px; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease; z-index: 1000;
+        }
+        .refresh-btn:hover { background: #007a2e; transform: scale(1.1); }
+
+        @media (max-width: 768px) {
+            .article-grid { grid-template-columns: 1fr; }
+            .stats-bar { grid-template-columns: 1fr; }
+            .header h1 { font-size: 2rem; }
+            .action-bar { padding: 0.5rem; }
+            .categories-nav { padding: 0.5rem; }
+            .category-filter { margin: 0.25rem; padding: 0.4rem 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>🇳🇬 Nigerian News Hub</h1>
+            <p>📸 Latest Updates with Images • 🔄 Auto-Refreshed</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="stats-bar">
+            <div class="stat-item">
+                <h3>{{ stats.total_articles }}</h3>
+                <p>📰 Total Articles</p>
+            </div>
+            <div class="stat-item">
+                <h3>{{ stats.posted_to_social }}</h3>
+                <p>📱 Shared on Social</p>
+            </div>
+            <div class="stat-item">
+                <h3>{{ stats.sources_count }}</h3>
+                <p>📡 News Sources</p>
+            </div>
+        </div>
+
+        <div class="action-bar">
+            <button class="action-btn" onclick="fetchRandomArticles()">🎲 Random Mix</button>
+            <a href="/random" class="action-btn secondary">🔄 Random Page</a>
+            <a href="/" class="action-btn secondary">📰 Latest News</a>
+            <button class="action-btn" onclick="fetchFreshNews()">⚡ Fresh News</button>
+        </div>
+
+        <div class="categories-nav">
+            <span class="category-filter active" data-category="all">🌟 All News</span>
+            <span class="category-filter" data-category="nigeria">🇳🇬 Nigeria</span>
+            <span class="category-filter" data-category="sports">⚽ Sports</span>
+            <span class="category-filter" data-category="entertainment">🎬 Entertainment</span>
+        </div>
+
+        <div class="article-grid" id="articlesGrid">
+            {% for article in articles %}
+            <div class="article-card" data-category="{{ article.category }}">
+                {% if article.local_image_path %}
+                <img src="/static/{{ article.local_image_path }}"
+                     alt="{{ article.title }}"
+                     class="article-image"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="article-image-placeholder" style="display: none;">
+                    {% if article.category == 'nigeria' %}🇳🇬
+                    {% elif article.category == 'sports' %}⚽
+                    {% elif article.category == 'entertainment' %}🎬
+                    {% else %}📰{% endif %}
+                </div>
+                {% else %}
+                <div class="article-image-placeholder">
+                    {% if article.category == 'nigeria' %}🇳🇬
+                    {% elif article.category == 'sports' %}⚽
+                    {% elif article.category == 'entertainment' %}🎬
+                    {% else %}📰{% endif %}
+                </div>
+                {% endif %}
+
+                <div class="article-content">
+                    <h2 class="article-title">{{ article.title }}</h2>
+                    <div class="article-meta">
+                        <span class="meta-badge">📰 {{ article.source }}</span>
+                        {% if article.category == 'nigeria' %}
+                        <span class="meta-badge nigeria-badge">🇳🇬 {{ article.category|title }}</span>
+                        {% elif article.category == 'sports' %}
+                        <span class="meta-badge sports-badge">⚽ {{ article.category|title }}</span>
+                        {% elif article.category == 'entertainment' %}
+                        <span class="meta-badge entertainment-badge">🎬 {{ article.category|title }}</span>
+                        {% endif %}
+                        <span class="meta-badge">📅 {{ article.published_date[:10] }}</span>
+                    </div>
+                    <p class="article-desc">
+                        {{ article.description[:180] }}{% if article.description|length > 180 %}...{% endif %}
+                    </p>
+                    <a href="{{ article.url }}" target="_blank" class="read-more">
+                        Read Full Article →
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <button class="refresh-btn" onclick="fetchRandomArticles()" title="Get random articles">
+        🎲
+    </button>
+
+    <script>
+        // Get random articles (main functionality)
+        function fetchRandomArticles() {
+            const btn = document.querySelector('.refresh-btn');
+            const actionBtns = document.querySelectorAll('.action-btn');
+
+            btn.innerHTML = '🔄';
+            actionBtns.forEach(b => b.disabled = true);
+
+            fetch('/api/random-articles?limit=15')
+                .then(response => response.json())
+                .then(articles => {
+                    updateArticleGrid(articles);
+                    btn.innerHTML = '🎲';
+                    actionBtns.forEach(b => b.disabled = false);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    btn.innerHTML = '❌';
+                    setTimeout(() => btn.innerHTML = '🎲', 2000);
+                    actionBtns.forEach(b => b.disabled = false);
+                });
+        }
+
+        // Fetch fresh news (background)
+        function fetchFreshNews() {
+            const btn = event.target;
+            btn.innerHTML = '⏳ Fetching...';
+            btn.disabled = true;
+
+            fetch('/api/fetch-news')
+                .then(response => response.json())
+                .then(data => {
+                    btn.innerHTML = '✅ Fetching...';
+                    setTimeout(() => {
+                        fetchRandomArticles();
+                        btn.innerHTML = '⚡ Fresh News';
+                        btn.disabled = false;
+                    }, 3000);
+                });
+        }
+
+        // Update article grid
+        function updateArticleGrid(articles) {
+            const grid = document.getElementById('articlesGrid');
+            grid.innerHTML = '';
+
+            articles.forEach((article, index) => {
+                const card = createArticleCard(article);
+                grid.appendChild(card);
+
+                // Animate in
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 50);
+            });
+        }
+
+        // Create article card
+        function createArticleCard(article) {
+            const card = document.createElement('div');
+            card.className = 'article-card';
+            card.dataset.category = article.category;
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'all 0.5s ease';
+
+            const categoryEmoji = {
+                'nigeria': '🇳🇬',
+                'sports': '⚽',
+                'entertainment': '🎬'
+            };
+
+            const categoryClass = {
+                'nigeria': 'nigeria-badge',
+                'sports': 'sports-badge',
+                'entertainment': 'entertainment-badge'
+            };
+
+            card.innerHTML = `
+                ${article.local_image_path ?
+                    `<img src="/static/${article.local_image_path}" alt="${article.title}" class="article-image">` :
+                    `<div class="article-image-placeholder">${categoryEmoji[article.category] || '📰'}</div>`
+                }
+                <div class="article-content">
+                    <h2 class="article-title">${article.title}</h2>
+                    <div class="article-meta">
+                        <span class="meta-badge">📰 ${article.source}</span>
+                        <span class="meta-badge ${categoryClass[article.category]}">${categoryEmoji[article.category] || '📂'} ${article.category.charAt(0).toUpperCase() + article.category.slice(1)}</span>
+                        <span class="meta-badge">📅 ${article.published_date.substring(0, 10)}</span>
+                    </div>
+                    <p class="article-desc">${article.description.substring(0, 180)}${article.description.length > 180 ? '...' : ''}</p>
+                    <a href="${article.url}" target="_blank" class="read-more">Read Full Article →</a>
+                </div>
+            `;
+
+            return card;
+        }
+
+        // Category filtering
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterButtons = document.querySelectorAll('.category-filter');
+            const articleCards = document.querySelectorAll('.article-card');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const category = this.dataset.category;
+
+                    articleCards.forEach(card => {
+                        if (category === 'all' || card.dataset.category === category) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // Initial animation
+            const cards = document.querySelectorAll('.article-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+
+        // Auto-refresh every 10 minutes
+        setTimeout(() => location.reload(), 600000);
+    </script>
+</body>
+</html>
